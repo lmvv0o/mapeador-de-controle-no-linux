@@ -20,13 +20,22 @@ dev = InputDevice(target)
 
 # Sequestra o controle físico para o Chrome só ouvir o virtual puro oficial
 try:
-    target_name = dev.name
+    target_vendor = dev.info.vendor
+    target_product = dev.info.product
     cont_ocultados = 0
+    
     for d in devices:
-        if d.name == target_name:
-            d.grab()
-            cont_ocultados += 1
-    print(f"\n[OK] {cont_ocultados} interface(s) do controle físico ocultada(s) por completo!")
+        if d.info.vendor == target_vendor and d.info.product == target_product:
+            try:
+                if d.path == dev.path:
+                    dev.grab()  # Sequestra pelo canal que o Python vai ler de verdade
+                else:
+                    d.grab()    # Sequestra os clones (Consumer Control, System Control)
+                cont_ocultados += 1
+            except IOError:
+                pass
+                
+    print(f"\n[OK] {cont_ocultados} interface(s) do dongle ocultada(s) com sucesso!")
     print("[FINALIZADO] Tudo 100% calibrado e corrigido. Boa jogada!\n")
 except IOError:
     print("[ERRO] Rode o script usando 'sudo'.")
@@ -35,7 +44,8 @@ except IOError:
 cap = {
     e.EV_KEY: [
         e.BTN_SOUTH, e.BTN_EAST, e.BTN_WEST, e.BTN_NORTH, 
-        e.BTN_TL, e.BTN_TR, e.BTN_SELECT, e.BTN_START, 
+        e.BTN_TL, e.BTN_TR, e.BTN_SELECT, e.BTN_START,
+        e.BTN_MODE, 
         e.BTN_THUMBL, e.BTN_THUMBR
     ],
     e.EV_ABS: [
@@ -91,15 +101,15 @@ with uinput.UInput(cap, name="Microsoft X-Box 360 pad", vendor=0x045e, product=0
             elif event.code == e.BTN_EAST:   ui.write(e.EV_KEY, e.BTN_EAST, event.value)  # B
             
             # Ajuste definitivo: mandando cada um direto para sua respectiva ID padrão Xbox
-            elif event.code == e.BTN_NORTH:  ui.write(e.EV_KEY, e.BTN_NORTH, event.value) # X físico vai como X real
-            elif event.code == e.BTN_WEST:   ui.write(e.EV_KEY, e.BTN_WEST, event.value)  # Y físico vai como Y real
+            elif event.code == e.BTN_NORTH:  ui.write(e.EV_KEY, e.BTN_NORTH, event.value) # X 
+            elif event.code == e.BTN_WEST:   ui.write(e.EV_KEY, e.BTN_WEST, event.value)  # Y 
             
             elif event.code == e.BTN_TL:     ui.write(e.EV_KEY, e.BTN_TL, event.value)    # LB
             elif event.code == e.BTN_TR:     ui.write(e.EV_KEY, e.BTN_TR, event.value)    # RB
             elif event.code == e.BTN_SELECT: ui.write(e.EV_KEY, e.BTN_SELECT, event.value)
             elif event.code == e.BTN_START:  ui.write(e.EV_KEY, e.BTN_START, event.value)
-            elif event.code == e.BTN_THUMBL: ui.write(e.EV_KEY, e.BTN_THUMBR, event.value) # L3 
-            elif event.code == e.BTN_THUMBR: ui.write(e.EV_KEY, e.BTN_THUMBL, event.value) # R3 
+            elif event.code == e.BTN_THUMBL: ui.write(e.EV_KEY, e.BTN_THUMBL, event.value) # L3 
+            elif event.code == e.BTN_THUMBR: ui.write(e.EV_KEY, e.BTN_THUMBR, event.value) # R3 
             
             # Gatilhos puros nos eixos analógicos do Xbox
             elif event.code == e.BTN_TL2:    # LT
