@@ -30,11 +30,11 @@ sudo python3 map.py
 
 Quando você rodar o script, ele vai cuspir uma lista de todos os dispositivos de entrada conectados na máquina. Para saber qual número escolher:
 
-Pelo nome de fábrica: Procure pelo nome da sua marca ou modelo (Ex: MACHENIKE G5Pro).
+* Pelo nome de fábrica: Procure pelo nome da sua marca ou modelo (Ex: MACHENIKE G5Pro).
 
-Por palavras-chave: Procure por linhas contendo Gamepad, Controller, Joystick ou Wireless Device.
+* Por palavras-chave: Procure por linhas contendo Gamepad, Controller, Joystick ou Wireless Device.
 
-O truque de tirar e colocar: Rode o script com o dongle desplugado, plugue-o no USB e rode de novo. O número novo que apareceu é o seu controle!
+* O truque de tirar e colocar: Rode o script com o dongle desplugado, plugue-o no USB e rode de novo. O número novo que apareceu é o seu controle!
 
 ! DICA CRUCIAL !: Assim que você digitar o número e o script mostrar a mensagem [RUNNING], pegue o seu controle e gire os dois analógicos fazendo círculos completos 2 ou 3 vezes. Isso calibra o alcance máximo de 100% da borda automaticamente!
 
