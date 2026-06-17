@@ -20,13 +20,17 @@ dev = InputDevice(target)
 
 # Sequestra o controle físico para o Chrome só ouvir o virtual puro oficial
 try:
-    dev.grab()
-    print(f"\n[OK] Controle físico ocultado com sucesso!")
-    print("[FINALIZADO] Tudo 100% calibrado. Boa jogada!\n")
+    target_name = dev.name
+    cont_ocultados = 0
+    for d in devices:
+        if d.name == target_name:
+            d.grab()
+            cont_ocultados += 1
+    print(f"\n[OK] {cont_ocultados} interface(s) do controle físico ocultada(s) por completo!")
+    print("[FINALIZADO] Tudo 100% calibrado e corrigido. Boa jogada!\n")
 except IOError:
     print("[ERRO] Rode o script usando 'sudo'.")
     exit()
-
 # Máscara perfeita de um controle de Xbox 360 oficial de fábrica
 cap = {
     e.EV_KEY: [
